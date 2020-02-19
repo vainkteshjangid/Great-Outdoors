@@ -3,16 +3,24 @@ package com.capgemini.greatoutdoors.service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.capgemini.greatoutdoors.exceptions.InvalidEmailException;
+import com.capgemini.greatoutdoors.exceptions.InvalidPasswordException;
+import com.capgemini.greatoutdoors.exceptions.InvalidPhoneNumberException;
+import com.capgemini.greatoutdoors.exceptions.InvalidUsernameException;
+
 public class ValidationService {
-	public static boolean isUsernameValid(String username) {
+	public static boolean isUsernameValid(String username) throws InvalidUsernameException{
 		final String  USERNAME_PATTERN="[a-zA-Z]{1}[a-zA-Z0-9]{1,}";
 		Pattern pattern=Pattern.compile(USERNAME_PATTERN);
 		Matcher matcher=pattern.matcher(username);
+		if(!matcher.matches()) {
+			throw new InvalidUsernameException("Invalid unername");
+		}
 		return matcher.matches();
 		
 	}
 	
-	public static boolean isPasswordValid(String password) {
+	public static boolean isPasswordValid(String password) throws InvalidPasswordException {
 		
 		if(password.length()>=8) {
 			Pattern pwdPattern,lowerPattern,upperPattern,numPattern,specialCharPattern;
@@ -39,21 +47,29 @@ public class ValidationService {
 				&&specialCharMatcher.find()) {
 				return true;
 			}
-		
+			
 		}
-		
-		return false;	
+		throw new InvalidPasswordException("Password should contain at leat one small letter"
+					+ ", one capital letter, one digit, one special character like @,#,! and must be at least"
+					+ " 8 characters long.");
 	}
 
-	public static boolean isPhoneNumberValid(String phone) {
+	public static boolean isPhoneNumberValid(String phone) throws InvalidPhoneNumberException {
 		Pattern pattern=Pattern.compile("[1-9]{1}[0-9]{9}");
 		Matcher matcher=pattern.matcher(phone);
+		if(!matcher.matches()) {
+			throw new InvalidPhoneNumberException("Phone no. should contain only 10 digits.");
+		}
 		return matcher.matches();
 	}
 	
-	public static boolean isEmailValid(String email) {
+	public static boolean isEmailValid(String email) throws InvalidEmailException {
 		Pattern pattern=Pattern.compile("[a-z0-9._]+@{1}[a-z0-9.]+");
 		Matcher emailMatcher=pattern.matcher(email);
+		if(!emailMatcher.matches()) {
+			throw new InvalidEmailException("Email should contain only small letters, "
+					+ "special characters like (. _) in the format \"user@domain\"");
+		}
 		return emailMatcher.matches();
 	}
 }

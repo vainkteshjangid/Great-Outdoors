@@ -1,9 +1,16 @@
 package com.capgemini.greatoutdoors.servicetest;
 
 
-import org.junit.Assert;
-import org.junit.Test;
 
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+
+import com.capgemini.greatoutdoors.exceptions.InvalidEmailException;
+import com.capgemini.greatoutdoors.exceptions.InvalidPasswordException;
+import com.capgemini.greatoutdoors.exceptions.InvalidPhoneNumberException;
+import com.capgemini.greatoutdoors.exceptions.InvalidUsernameException;
 import com.capgemini.greatoutdoors.service.ValidationService;
 
 public class ValidationServiceTest{
@@ -11,20 +18,19 @@ public class ValidationServiceTest{
 /*------------------------Testcases to validate Username-----------------------------*/
 ///////////////////////////////////////////////////////////////////////////////////////
 	@Test
-	public void isUsernameValidTest1() {
-		
-		Assert.assertFalse(ValidationService.isUsernameValid("Vainktesh@123"));
+	public void isUsernameValidTest1() throws InvalidUsernameException {
+		Assertions.assertThrows(InvalidUsernameException.class,()->ValidationService.isUsernameValid("Vainktesh@123"));
 	}
 	@Test
-	public void isUsernameValidTest2() {
-		Assert.assertFalse(ValidationService.isUsernameValid("123vainktesh"));
+	public void isUsernameValidTest2() throws InvalidUsernameException{
+		Assertions.assertThrows(InvalidUsernameException.class,()->ValidationService.isUsernameValid("123vainktesh"));
 	}
 	@Test
-	public void isUsernameValidTest3() {
-		Assert.assertFalse(ValidationService.isUsernameValid("12345"));
+	public void isUsernameValidTest3() throws InvalidUsernameException{
+		Assertions.assertThrows(InvalidUsernameException.class,()->ValidationService.isUsernameValid("12345"));
 	}
 	@Test
-	public void isUsernameValidTest4() {
+	public void isUsernameValidTest4() throws InvalidUsernameException{
 		Assert.assertTrue(ValidationService.isUsernameValid("Vainktesh123"));
 	}
 	
@@ -34,26 +40,26 @@ public class ValidationServiceTest{
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Test
 	public void isPasswordValidTest1() {
-		Assert.assertFalse(ValidationService.isPasswordValid("hello@2020"));
+		Assertions.assertThrows(InvalidPasswordException.class,()->ValidationService.isPasswordValid("hello@2020"));
 	}
 	@Test
 	public void isPasswordValidTest2() {
-		Assert.assertFalse(ValidationService.isPasswordValid("HELLO@2020"));
+		Assertions.assertThrows(InvalidPasswordException.class,()->ValidationService.isPasswordValid("HELLO@2020"));
 	}
 	@Test
 	public void isPasswordValidTest3() {
-		Assert.assertFalse(ValidationService.isPasswordValid("Hello2020"));
+		Assertions.assertThrows(InvalidPasswordException.class,()->ValidationService.isPasswordValid("Hello2020"));
 	}
 	@Test
 	public void isPasswordValidTest4() {
-		Assert.assertFalse(ValidationService.isPasswordValid("hello@INDIA"));
+		Assertions.assertThrows(InvalidPasswordException.class,()->ValidationService.isPasswordValid("hello@INDIA"));
 	}
 	@Test
 	public void isPasswordValidTest5() {
-		Assert.assertFalse(ValidationService.isPasswordValid("Hi#123"));
+		Assertions.assertThrows(InvalidPasswordException.class,()->ValidationService.isPasswordValid("Hi#123"));
 	}
 	@Test
-	public void isPasswordValidTest6() {
+	public void isPasswordValidTest6() throws InvalidPasswordException {
 		Assert.assertTrue(ValidationService.isPasswordValid("Hello@2020!"));
 	}
 	
@@ -62,23 +68,23 @@ public class ValidationServiceTest{
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Test
 	public void isPhoneNumberValidTest1() {
-		Assert.assertFalse(ValidationService.isPhoneNumberValid("985263"));
+		Assertions.assertThrows(InvalidPhoneNumberException.class,()->ValidationService.isPhoneNumberValid("985263"));
 	}
 	@Test
 	public void isPhoneNumberValidTest2() {
-		Assert.assertFalse(ValidationService.isPhoneNumberValid("985263447725"));
+		Assertions.assertThrows(InvalidPhoneNumberException.class,()->ValidationService.isPhoneNumberValid("985263447725"));
 	}
 	@Test
 	public void isPhoneNumberValidTest3() {
-		Assert.assertFalse(ValidationService.isPhoneNumberValid("0852634512"));
+		Assertions.assertThrows(InvalidPhoneNumberException.class,()->ValidationService.isPhoneNumberValid("0852634512"));
 	}
 	@Test
-	public void isPhoneNumberValidTest4() {
+	public void isPhoneNumberValidTest4() throws InvalidPhoneNumberException {
 		Assert.assertTrue(ValidationService.isPhoneNumberValid("9852634512"));
 	}
 	@Test
 	public void isPhoneNumberValidTest5() {
-		Assert.assertFalse(ValidationService.isPhoneNumberValid("985263abcd"));
+		Assertions.assertThrows(InvalidPhoneNumberException.class,()->ValidationService.isPhoneNumberValid("985263abcd"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -86,26 +92,26 @@ public class ValidationServiceTest{
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Test
 	public void isEmailValidTest1() {
-		Assert.assertFalse(ValidationService.isEmailValid("Abhishek@gmail.com"));
+		Assertions.assertThrows(InvalidEmailException.class,()->ValidationService.isEmailValid("Abhishek@gmail.com"));
 	}
 	@Test
 	public void isEmailValidTest2() {
-		Assert.assertFalse(ValidationService.isEmailValid("abhishek.gmail.com"));
+		Assertions.assertThrows(InvalidEmailException.class,()->ValidationService.isEmailValid("abhishek.gmail.com"));
 	}
 	@Test
 	public void isEmailValidTest3() {
-		Assert.assertFalse(ValidationService.isEmailValid("abhishek@"));
+		Assertions.assertThrows(InvalidEmailException.class,()->ValidationService.isEmailValid("abhishek@"));
 	}
 	@Test
 	public void isEmailValidTest4() {
-		Assert.assertFalse(ValidationService.isEmailValid("@abhishek.gmail.com"));
+		Assertions.assertThrows(InvalidEmailException.class,()->ValidationService.isEmailValid("@abhishek.gmail.com"));
 	}
 	@Test
 	public void isEmailValidTest5() {
-		Assert.assertFalse(ValidationService.isEmailValid("Abhi_sharma.123@gmail_com"));
+		Assertions.assertThrows(InvalidEmailException.class,()->ValidationService.isEmailValid("Abhi_sharma.123@gmail_com"));
 	}
 	@Test
-	public void isEmailValidTest6() {
+	public void isEmailValidTest6() throws InvalidEmailException{
 		Assert.assertTrue(ValidationService.isEmailValid("abhi_sharma.123@gmail.com"));
 	}
 }

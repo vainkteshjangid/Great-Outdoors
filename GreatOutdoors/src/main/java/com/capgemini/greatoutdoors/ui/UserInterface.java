@@ -146,15 +146,13 @@ public class UserInterface {
 		do {
 			System.out.print("Enter username:");
 			username=s.nextLine();
-			isValid=ValidationService.isUsernameValid(username);
+			
 			try {
-				if(!isValid) {
-					throw new InvalidUsernameException("Username should be alphanumric and must start with a letter.");
-				}
+				isValid=ValidationService.isUsernameValid(username);
 			}catch(InvalidUsernameException e) {
 				System.out.println(e);
+				isValid=false;
 			}
-			
 		}while(!isValid);
 		newUser.setUsername(username);
 		
@@ -165,15 +163,11 @@ public class UserInterface {
 			do {
 				System.out.print("Enter a password:");
 				pwd=s.nextLine();
-				isValid=ValidationService.isPasswordValid(pwd);
 				try {
-					if(!isValid) {
-						throw new InvalidPasswordException("Password should contain at leat one small letter"
-								+ ", one capital letter, one digit, one special character like @,#,! and must be at least"
-								+ " 8 characters long.");
-					}
+					isValid=ValidationService.isPasswordValid(pwd);
 				}catch(InvalidPasswordException e) {
 					System.out.println(e);
+					isValid=false;
 				}
 			}while(!isValid);
 			
@@ -193,14 +187,11 @@ public class UserInterface {
 		do {
 			System.out.print("Enter email:");
 			email=s.nextLine();
-			isValid=ValidationService.isEmailValid(email);
 			try {
-				if(!isValid) {
-					throw new InvalidEmailException("Email should contain only small letters, "
-							+ "special characters like (. _) in the format \"user@domain\"");
-				}
+				isValid=ValidationService.isEmailValid(email);
 			}catch(InvalidEmailException e) {
 				System.out.println(e);
+				isValid=false;
 			}
 		}while(!isValid);
 		newUser.setEmail(email);
@@ -211,13 +202,11 @@ public class UserInterface {
 		do {
 			System.out.print("Enter Phone no:");
 			phone=s.nextLine();
-			isValid=ValidationService.isPhoneNumberValid(phone);
 			try {
-				if(!isValid) {
-					throw new InvalidPhoneNumberException("Phone no. should contain only 10 digits.");
-				}
+				isValid=ValidationService.isPhoneNumberValid(phone);
 			}catch(InvalidPhoneNumberException e) {
 				System.out.println(e);
+				isValid=false;
 			}
 		}while(!isValid);
 		newUser.setPhoneNumber(phone);
