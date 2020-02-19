@@ -13,4 +13,10 @@ public class CartServiceImpl implements CartService {
 		return cart.removeItemFromCart(cartDTOObj);
 	}
 
+	public void displayCartItems(String currentUser) {
+		// TODO Auto-generated method stub
+		cart.displayCartItems(currentUser);
+		
+	}
+
 }

@@ -1,7 +1,12 @@
 package com.capgemini.greatoutdoors.ui;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
+import com.capgemini.greatoutdoors.util.CartRepository;
 import com.capgemini.greatoutdoors.util.CurrentSessionInfo;
 import com.capgemini.greatoutdoors.util.UserRepository;
 import com.capgemini.greatoutdoors.dto.AddressDTO;
@@ -26,6 +31,14 @@ public class UserInterface {
 		homePage();
 	}
 	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*****************************************************************************************************************
+* Function Name : homePage
+* Input Parameters : void
+* Return type : void
+* Description : Contains the behaviour of home page
+*****************************************************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private static void homePage() {
 		Scanner s=new Scanner(System.in);
 		System.out.println("1. Register a new user.");
@@ -36,21 +49,30 @@ public class UserInterface {
 		
 		switch(ch) {
 		case '1':
-			UserRegistration();
+			userRegistration();
 			break;
 		case '2':
-			UserLogin();
+			userLogin();
 			break;
 		case '3':
-			UserLogout();
+			userLogout();
 			break;
 		case '4':
-			GoToCart();
+			goToCart();
 			break;
 		}
 	}
 	
-	private static void GoToCart() {
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*****************************************************************************************************************
+* Function Name : goToCart
+* Input Parameters : void
+* Return type : void
+* Description : Handles cart operations
+*****************************************************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private static void goToCart() {
 		// TODO Auto-generated method stub
 		Scanner s=new Scanner(System.in);
 		CartDTO cartDTOObj=new CartDTO();
@@ -58,6 +80,8 @@ public class UserInterface {
 			System.out.println("You are not logged in. Please login!");
 		}
 		else {
+			
+			cartService.displayCartItems(CurrentSessionInfo.currentUser);
 			cartDTOObj.setUsername(CurrentSessionInfo.currentUser);
 			String productID,quantity;
 			System.out.println("1.Add items to the cart.");
@@ -98,7 +122,16 @@ public class UserInterface {
 		homePage();
 	}
 
-	private static void UserLogout() {
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*****************************************************************************************************************
+* Function Name : userLogout
+* Input Parameters : void
+* Return type : void
+* Description : Logout active user if any
+*****************************************************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private static void userLogout() {
 		boolean isLoggedOut=userService.userLogout();
 		if(isLoggedOut) {
 			System.out.println("Logged out successfully!");
@@ -109,7 +142,16 @@ public class UserInterface {
 		homePage();
 	}
 
-	private static void UserLogin() {
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*****************************************************************************************************************
+* Function Name : userLogin
+* Input Parameters : void
+* Return type : void
+* Description : Perform login activity
+*****************************************************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private static void userLogin() {
 		
 		if(CurrentSessionInfo.isLoggedIn) {
 			System.out.println("You are already logged in.");
@@ -135,7 +177,16 @@ public class UserInterface {
 		homePage();
 	}
 
-	private static void UserRegistration() {
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*****************************************************************************************************************
+* Function Name : userRegistration
+* Input Parameters : void
+* Return type : void
+* Description : Contains user registration process
+*****************************************************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private static void userRegistration() {
 		// TODO Auto-generated method stub
 		Scanner s=new Scanner(System.in);
 		UserDTO newUser=new UserDTO();

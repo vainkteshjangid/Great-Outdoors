@@ -9,6 +9,14 @@ import com.capgemini.greatoutdoors.exceptions.InvalidPhoneNumberException;
 import com.capgemini.greatoutdoors.exceptions.InvalidUsernameException;
 
 public class ValidationService {
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*****************************************************************************************************************
+* Function Name : isUsernameValid;
+* Input Parameters : username;
+* Return type : boolean
+* Description : This function check whether a username is valid or not.
+*****************************************************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static boolean isUsernameValid(String username) throws InvalidUsernameException{
 		final String  USERNAME_PATTERN="[a-zA-Z]{1}[a-zA-Z0-9]{1,}";
 		Pattern pattern=Pattern.compile(USERNAME_PATTERN);
@@ -20,6 +28,14 @@ public class ValidationService {
 		
 	}
 	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*****************************************************************************************************************
+* Function Name : isPasswordValid;
+* Input Parameters : password;
+* Return type : boolean
+* Description : Checks whether a password is valid or not
+*****************************************************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	public static boolean isPasswordValid(String password) throws InvalidPasswordException {
 		
 		if(password.length()>=8) {
@@ -54,6 +70,14 @@ public class ValidationService {
 					+ " 8 characters long.");
 	}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*****************************************************************************************************************
+* Function Name : isPhoneNumberValid;
+* Input Parameters : phone
+* Return type : boolean
+* Description :  Checks weather a phone number is valid or not
+*****************************************************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	public static boolean isPhoneNumberValid(String phone) throws InvalidPhoneNumberException {
 		Pattern pattern=Pattern.compile("[1-9]{1}[0-9]{9}");
 		Matcher matcher=pattern.matcher(phone);
@@ -63,6 +87,15 @@ public class ValidationService {
 		return matcher.matches();
 	}
 	
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*****************************************************************************************************************
+* Function Name : isEmailValid;
+* Input Parameters : email;
+* Return type : boolean;
+* Description : Checks whether an email is valid or not
+*****************************************************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static boolean isEmailValid(String email) throws InvalidEmailException {
 		Pattern pattern=Pattern.compile("[a-z0-9._]+@{1}[a-z0-9.]+");
 		Matcher emailMatcher=pattern.matcher(email);
