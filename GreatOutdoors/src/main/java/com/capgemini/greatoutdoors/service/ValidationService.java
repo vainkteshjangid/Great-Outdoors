@@ -22,11 +22,12 @@ public class ValidationService {
 		Pattern pattern=Pattern.compile(USERNAME_PATTERN);
 		Matcher matcher=pattern.matcher(username);
 		if(!matcher.matches()) {
-			throw new InvalidUsernameException("Invalid unername");
+			throw new InvalidUsernameException("Invalid username!username must start with a letter and it should be alphanumeric.");
 		}
 		return matcher.matches();
 		
 	}
+	
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*****************************************************************************************************************

@@ -6,8 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.capgemini.greatoutdoors.dto.CartDTO;
+import com.capgemini.greatoutdoors.exceptions.ItemNotFoundInCartException;
 import com.capgemini.greatoutdoors.util.CartRepository;
-import com.capgemini.greatoutdoors.util.CurrentSessionInfo;
+
 
 public class CartDaoImpl implements CartDao {
 
@@ -32,16 +33,18 @@ public class CartDaoImpl implements CartDao {
 	}
 
 	
-	public boolean removeItemFromCart(CartDTO cartDTOObj) {
+	public boolean removeItemFromCart(CartDTO cartDTOObj) throws ItemNotFoundInCartException {
 		String username=cartDTOObj.getUsername();
 		String productID=cartDTOObj.getProductID();
+		if(!CartRepository.cart.get(username).containsKey(productID)) {
+			throw new ItemNotFoundInCartException("Product not found in cart.");
+		}
 		CartRepository.cart.get(username).remove(productID);
 		if(!CartRepository.cart.get(username).containsKey(productID)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+		return false;
+
 	}
 
 
@@ -58,6 +61,15 @@ public class CartDaoImpl implements CartDao {
 			}
 		}
 		
+	}
+
+
+	public boolean isCartEmpty(CartDTO cartDTOObj) {
+		String username=cartDTOObj.getUsername();
+		if(!CartRepository.cart.containsKey(username)){
+			return true;
+		}
+		return CartRepository.cart.get(cartDTOObj.getUsername()).isEmpty();
 	}
 
 }

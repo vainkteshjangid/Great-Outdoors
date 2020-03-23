@@ -1,6 +1,9 @@
 package com.capgemini.greatdoors.dao;
 
 import com.capgemini.greatoutdoors.dto.UserDTO;
+import com.capgemini.greatoutdoors.exceptions.InvalidUsernameException;
+import com.capgemini.greatoutdoors.exceptions.UserNotFoundException;
+import com.capgemini.greatoutdoors.exceptions.WrongPasswordException;
 
 public interface UserDao {
 	
@@ -10,9 +13,10 @@ public interface UserDao {
 * Input Parameters : newUser
 * Return type : boolean
 * Description : returns true if registraion is successful else return false
+* @throws InvalidUsernameException 
 *****************************************************************************************************************/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	boolean userRegistration(UserDTO newUser);
+	boolean userRegistration(UserDTO newUser) throws InvalidUsernameException;
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*****************************************************************************************************************
@@ -20,9 +24,11 @@ public interface UserDao {
 * Input Parameters : username,password
 * Return type : boolean
 * Description : return true if login is successful else return false
+ * @throws UserNotFoundException 
+ * @throws WrongPasswordException 
 *****************************************************************************************************************/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	boolean userLogin(String username,String password);
+	boolean userLogin(String username,String password) throws UserNotFoundException, WrongPasswordException;
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*****************************************************************************************************************

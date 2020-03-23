@@ -16,6 +16,9 @@ import com.capgemini.greatoutdoors.exceptions.InvalidEmailException;
 import com.capgemini.greatoutdoors.exceptions.InvalidPasswordException;
 import com.capgemini.greatoutdoors.exceptions.InvalidPhoneNumberException;
 import com.capgemini.greatoutdoors.exceptions.InvalidUsernameException;
+import com.capgemini.greatoutdoors.exceptions.ItemNotFoundInCartException;
+import com.capgemini.greatoutdoors.exceptions.UserNotFoundException;
+import com.capgemini.greatoutdoors.exceptions.WrongPasswordException;
 import com.capgemini.greatoutdoors.service.CartServiceImpl;
 import com.capgemini.greatoutdoors.service.UserServiceImpl;
 import com.capgemini.greatoutdoors.service.ValidationService;
@@ -26,8 +29,6 @@ public class UserInterface {
 	static CartServiceImpl cartService=new CartServiceImpl();
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new UserRepository();
-		
 		homePage();
 	}
 	
@@ -60,6 +61,10 @@ public class UserInterface {
 		case '4':
 			goToCart();
 			break;
+		default:
+			System.out.println("Invalid input!");
+			homePage();
+			break;
 		}
 	}
 	
@@ -86,6 +91,7 @@ public class UserInterface {
 			String productID,quantity;
 			System.out.println("1.Add items to the cart.");
 			System.out.println("2.Remove item from cart.");
+			System.out.println("3.Go to home page.");
 			char ch=s.next().charAt(0);
 			s.nextLine();
 			switch(ch) {
@@ -101,21 +107,36 @@ public class UserInterface {
 					System.out.println("Item added in the cart.");
 				}
 				else {
-					System.out.println("Could not add item in the list!");
+					System.out.println("Could not add item in the CART!");
 				}
 				break;
 				
 			case '2':
+				boolean emptyCart=cartService.isCartEmpty(cartDTOObj);
+				if(emptyCart) {
+					System.out.println("Cart is already empty!");
+					break;
+				}
 				System.out.print("Enter Product ID:");
 				productID=s.nextLine();
 				cartDTOObj.setProductID(productID);
-				boolean isRemoved=cartService.removeItemFromCart(cartDTOObj);
+				boolean isRemoved;
+				try {
+					isRemoved = cartService.removeItemFromCart(cartDTOObj);
+				} catch (ItemNotFoundInCartException e) {
+					System.out.println(e.getMessage());
+					isRemoved=false;
+				}
 				if(isRemoved) {
 					System.out.println("Item removed from cart successfully!");
 				}
-				else {
-					System.out.println("Could not remove item from cart!");
-				}
+				break;
+			case '3':
+				homePage();
+				break;
+			default:
+				System.out.println("Invalid input!");
+				goToCart();
 				break;
 			}
 		}
@@ -165,7 +186,13 @@ public class UserInterface {
 			System.out.print("Password:");
 			password=s.nextLine();
 			
-			boolean loggedIn=userService.userLogin(username,password);
+			boolean loggedIn;
+			try {
+				loggedIn = userService.userLogin(username,password);
+			} catch (UserNotFoundException | WrongPasswordException e) {
+				System.out.println(e.getMessage());
+				loggedIn=false;
+			}
 			if(loggedIn) {
 				System.out.println("You are logged in successfully!");
 				CurrentSessionInfo.isLoggedIn=true;
@@ -177,7 +204,6 @@ public class UserInterface {
 		homePage();
 	}
 
-	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*****************************************************************************************************************
 * Function Name : userRegistration
@@ -201,7 +227,7 @@ public class UserInterface {
 			try {
 				isValid=ValidationService.isUsernameValid(username);
 			}catch(InvalidUsernameException e) {
-				System.out.println(e);
+				System.out.println(e.getMessage());
 				isValid=false;
 			}
 		}while(!isValid);
@@ -217,7 +243,7 @@ public class UserInterface {
 				try {
 					isValid=ValidationService.isPasswordValid(pwd);
 				}catch(InvalidPasswordException e) {
-					System.out.println(e);
+					System.out.println(e.getMessage());
 					isValid=false;
 				}
 			}while(!isValid);
@@ -241,7 +267,7 @@ public class UserInterface {
 			try {
 				isValid=ValidationService.isEmailValid(email);
 			}catch(InvalidEmailException e) {
-				System.out.println(e);
+				System.out.println(e.getMessage());
 				isValid=false;
 			}
 		}while(!isValid);
@@ -256,7 +282,7 @@ public class UserInterface {
 			try {
 				isValid=ValidationService.isPhoneNumberValid(phone);
 			}catch(InvalidPhoneNumberException e) {
-				System.out.println(e);
+				System.out.println(e.getMessage());
 				isValid=false;
 			}
 		}while(!isValid);
@@ -281,12 +307,18 @@ public class UserInterface {
 		newUser.setAddress(address);
 		
 		//*************************************************************************************
-		boolean registered=userService.userRegistration(newUser);
+		boolean registered;
+		try {
+			registered = userService.userRegistration(newUser);
+		} catch (InvalidUsernameException e) {
+			System.out.println(e.getMessage());
+			registered=false;
+		}
 		if(registered) {
 			System.out.println("Registration successful!");
 		}
 		else {
-			System.out.println("Could no complete registration process. Please try later.");
+			System.out.println("Could not complete registration process. Please try again.");
 		}
 		homePage();
 	}

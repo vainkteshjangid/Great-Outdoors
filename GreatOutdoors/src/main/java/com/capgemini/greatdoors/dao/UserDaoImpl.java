@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.capgemini.greatoutdoors.dto.CartDTO;
 import com.capgemini.greatoutdoors.dto.UserDTO;
+import com.capgemini.greatoutdoors.exceptions.InvalidUsernameException;
 import com.capgemini.greatoutdoors.exceptions.UserNotFoundException;
 import com.capgemini.greatoutdoors.exceptions.WrongPasswordException;
 import com.capgemini.greatoutdoors.ui.UserInterface;
@@ -13,7 +14,12 @@ import com.capgemini.greatoutdoors.util.UserRepository;
 
 public class UserDaoImpl implements UserDao{
 
-	public boolean userRegistration(UserDTO newUser) {
+	public boolean userRegistration(UserDTO newUser) throws InvalidUsernameException {
+		boolean userAlreadyExist=UserRepository.userList.containsKey(newUser.getUsername());
+		if(userAlreadyExist) {
+			throw new InvalidUsernameException("username already exist! Try another username.");
+		}
+		
 		UserDTO res=UserRepository.userList.put(newUser.getUsername(),newUser);
 		if(res==null) {
 			return true;
@@ -21,30 +27,19 @@ public class UserDaoImpl implements UserDao{
 		return false;
 	}
 
-	public boolean userLogin(String username,String password) {
+	public boolean userLogin(String username,String password) throws UserNotFoundException, WrongPasswordException {
 		boolean isValid;
 		
 		//Check if username exist
 		isValid=UserRepository.userList.containsKey(username);
-		try {
-			if(!isValid) {
-				throw new UserNotFoundException("The username entered is incorrect! Try again.");
-			}
-		}catch(UserNotFoundException e) {
-			System.out.println(e);
-			return false;
+		if(!isValid) {
+			throw new UserNotFoundException("username does not exist!");
 		}
-		
 		
 		//check if password is correct
 		isValid=(password.equals(UserRepository.userList.get(username).getPassword()));
-		try {
-			if(!isValid) {
-				throw new WrongPasswordException("Password is wrong!");
-			}
-		}catch(WrongPasswordException e) {
-			System.out.println(e);
-			return false;
+		if(!isValid) {
+			throw new WrongPasswordException("Password is wrong! Try again");
 		}
 		
 		return true;

@@ -1,6 +1,7 @@
 package com.capgemini.greatoutdoors.service;
 
 import com.capgemini.greatoutdoors.dto.CartDTO;
+import com.capgemini.greatoutdoors.exceptions.ItemNotFoundInCartException;
 
 public interface CartService {
 
@@ -21,9 +22,11 @@ public interface CartService {
 * Input Parameters : cartDTOObj
 * Return type : boolean
 * Description : Remove an item from cart
+ * @throws EmptyCartException 
+ * @throws ItemNotFoundInCartException 
 *****************************************************************************************************************/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	boolean removeItemFromCart(CartDTO cartDTOObj);
+	boolean removeItemFromCart(CartDTO cartDTOObj) throws ItemNotFoundInCartException;
 	
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
